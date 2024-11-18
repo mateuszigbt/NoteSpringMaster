@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  postgres-database:
+    container_name: postgres-database
+    image: postgres:alpine
+    #restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: notedb
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  spring-app:
+    container_name: noteapp
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres-database
+
+volumes:
+  postgres_data:
